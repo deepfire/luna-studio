@@ -66,6 +66,7 @@ luna-shell.sh
 #general builds
 dist
 dist-package
+dist-newstyle
 DllWrappers
 
 # cabal sandbox
