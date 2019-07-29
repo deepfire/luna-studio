@@ -11,7 +11,7 @@ import           Data.Aeson                    (Result (Success), fromJSON)
 import qualified Data.Aeson                    as Aeson
 import qualified Data.ByteString.Lazy.Char8    as BS
 import           GHCJS.Foreign.Callback
-import           GHCJS.Marshal                 (fromJSVal, toJSVal_aeson)
+import           GHCJS.Marshal                 (fromJSVal, toJSVal)
 import           GHCJS.Types                   (JSVal)
 import qualified JS.Event                      as JS
 import           LunaStudio.Data.GraphLocation (GraphLocation)
@@ -52,6 +52,9 @@ parseEvent jsval = do
 
 setActiveLocation :: MonadIO m => GraphLocation -> m ()
 setActiveLocation gl = liftIO $ setActiveLocation' =<< toJSVal_aeson gl
+
+toJSVal_aeson :: Aeson.ToJSON a => a -> IO JSVal
+toJSVal_aeson = toJSVal . Aeson.toJSON
 
 acceptEvent :: JS.Event -> Bool
 acceptEvent = acceptEvent' . convert . BS.unpack . Aeson.encode

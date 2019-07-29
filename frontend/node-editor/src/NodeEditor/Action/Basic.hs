@@ -1,3 +1,5 @@
+{-# LANGUAGE NoMonadFailDesugaring #-}
+
 module NodeEditor.Action.Basic
     ( module NodeEditor.Action.Basic
     , module X

@@ -8,6 +8,7 @@ import           Data.Map                             (Map)
 import           Data.Set                             (Set)
 import qualified Data.Set                             as Set
 import           Data.Time.Clock                      (UTCTime)
+import           Data.Typeable                        (TypeRep, typeOf)
 import           LunaStudio.Data.NodeLoc              (NodeLoc)
 import           LunaStudio.Data.PortRef              (AnyPortRef, InPortRef, OutPortRef)
 import           LunaStudio.Data.Position             (Position)

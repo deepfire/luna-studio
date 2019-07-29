@@ -3,11 +3,12 @@
 module Common.Analytics  where
 
 import           Common.Prelude
-import           Data.Aeson        (Value, toJSON)
-import           GHCJS.Marshal     (toJSVal_aeson)
+import           Data.Aeson        (Value, ToJSON, toJSON)
 import qualified JS.Analytics      as JS
 import           Common.Data.Event (EventName(..))
 
+toJSVal_aeson :: ToJSON a => a -> IO JSVal
+toJSVal_aeson = toJSVal . toJSON
 
 class (EventName a, Show a) => IsTrackedEvent a where
     isTracked :: a -> Bool

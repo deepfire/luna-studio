@@ -1,3 +1,5 @@
+{-# LANGUAGE NoMonadFailDesugaring #-}
+
 module NodeEditor.Action.UUID
     ( getUUID
     , registerRequest
