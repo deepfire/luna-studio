@@ -19,6 +19,7 @@ import qualified NodeEditor.Event.Preprocessor.Batch    as BatchEventPreprocesso
 import qualified NodeEditor.Event.Preprocessor.Shortcut as ShortcutEventPreprocessor
 import           NodeEditor.Event.Source                (AddHandler (..))
 import qualified NodeEditor.Event.Source                as JSHandlers
+import qualified NodeEditor.Event.UI                    as Event
 import qualified NodeEditor.Handler.App                 as App
 import qualified NodeEditor.Handler.Backend.Control     as Control
 import qualified NodeEditor.Handler.Backend.Graph       as Graph
@@ -37,6 +38,7 @@ import qualified NodeEditor.Handler.Sidebar             as Sidebar
 import qualified NodeEditor.Handler.Undo                as Undo
 import qualified NodeEditor.Handler.Visualization       as Visualization
 import           NodeEditor.State.Global                (State)
+import qualified NodeEditor.React.Event.App             as Event
 import           WebSocket                              (WebSocket)
 
 actions :: LoopRef -> [Event -> Maybe (Command State ())]
@@ -72,6 +74,9 @@ preprocessEvent ev = do
 processEvent :: LoopRef -> Event -> IO ()
 processEvent loop ev = handle handleAnyException $ modifyMVar_ (loop ^. Loop.state) $ \state -> do
     realEvent <- preprocessEvent ev
+    case realEvent of
+      Event.UI (Event.AppEvent Event.MouseMove{}) -> pure ()
+      ev -> warn "processEvent" (show ev)
     filterEvents state realEvent $ do
         Analytics.track realEvent
         handle (handleExcept state realEvent) $
@@ -79,8 +84,9 @@ processEvent loop ev = handle handleAnyException $ modifyMVar_ (loop ^. Loop.sta
 
 connectEventSources :: WebSocket -> LoopRef -> IO ()
 connectEventSources conn loop = do
-    let handlers = [ JSHandlers.webSocketHandler conn
-                   , JSHandlers.atomHandler
+    let handlers = [ -- JSHandlers.webSocketHandler conn
+                   -- , 
+                     JSHandlers.atomHandler
                    , JSHandlers.sceneResizeHandler
                    , JSHandlers.movementHandler
                    ]

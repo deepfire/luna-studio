@@ -50,7 +50,7 @@ app ref = React.defineControllerView name ref $ \store () -> do
         , "className" $= Style.prefixFromList [ "studio", "noselect"]
         ] $ do
         nodeEditor_  ref (s ^. App.nodeEditor) (isTopLevel $ s ^. App.breadcrumbs)
-        breadcrumbs_ ref (s ^. App.moduleName) $ s ^. App.breadcrumbs
+        -- breadcrumbs_ ref (s ^. App.moduleName) $ s ^. App.breadcrumbs
 
 focus :: MonadIO m => m ()
 focus = UI.focus appId

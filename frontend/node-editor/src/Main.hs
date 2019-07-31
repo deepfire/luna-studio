@@ -1,8 +1,10 @@
 {-# LANGUAGE RecursiveDo #-}
 module Main where
 
+import           Prelude                    (error)
 import           Common.Prelude
 import           Common.ClientId            (clientId)
+import           Common.Report              (fatal)
 import           Control.Concurrent.Chan    (Chan)
 import qualified Control.Concurrent.Chan    as Chan
 import           Control.Concurrent.MVar
@@ -17,12 +19,14 @@ import           NodeEditor.State.Global    (mkState)
 import qualified React.Flux                 as React
 import           System.Random              (newStdGen)
 import           WebSocket                  (WebSocket)
+import           GHC.Stack                  (HasCallStack)
+
 
 
 runApp :: Chan (IO ()) -> WebSocket -> IO ()
 runApp chan socket = do
     random         <- newStdGen
-    let openedFile = Mount.openedFile
+    let openedFile = Nothing --Mount.openedFile
     mdo
         let loop = LoopRef chan state
         Engine.scheduleInit loop
@@ -33,8 +37,12 @@ runApp chan socket = do
         Engine.connectEventSources socket loop
     App.focus
 
+withActiveConnection :: HasCallStack => (WebSocket -> IO ()) -> IO ()
+withActiveConnection action = do
+  action (error "SOCKET SOCKET SOCKET")
+
 main :: IO ()
 main = do
     chan <- Chan.newChan
-    Engine.withActiveConnection $ runApp chan
+    withActiveConnection $ runApp chan
     Engine.start chan

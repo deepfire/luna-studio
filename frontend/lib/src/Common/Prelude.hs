@@ -47,6 +47,10 @@ import           System.FilePath           as X ((</>))
 
 foreign import javascript safe "console.log($1)" consoleLog :: JSString -> IO ()
 
+foreign import javascript safe "console.warn(\"%s:  %s\", $1, $2)" warnRaw :: JSVal -> JSVal -> IO ()
+warn :: ToJSVal a => String -> a -> IO ()
+warn x y = uncurry warnRaw =<< liftA2 (,) (toJSVal x) (toJSVal y)
+
 print :: (MonadIO m, Show a) => a -> m ()
 print = putStrLn . show
 

@@ -16,6 +16,11 @@
       ];
   };
 
+  shellToolOverrides = ghc: super: {
+    ghc-mod = null;
+    ghcid = pkgs.haskell.lib.justStaticExecutables super.ghcid;
+  };
+
   overrides = self: super: with pkgs.haskell.lib;
   let c = owner: repo: rev: sha256: cabalExtras:
       doJailbreak

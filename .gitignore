@@ -13,6 +13,9 @@ out
 a.out
 *.li
 *.pyc
+zipfs/
+zipfs.js
+frontend/node-editor/js/lib-suffix-dynamic.js
 
 # profiling results
 *.hp
